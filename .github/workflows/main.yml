@@ -19,6 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@master
     - name: Containers coming up
       run: docker-compose up -d dvwa fast selenium
 
@@ -36,5 +37,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@master
     - name: Cleanup
       run: docker-compose down
