@@ -1,5 +1,7 @@
 # README
 
+![](https://github.com/416e64726579/fast-example-github-dvwa-integration/workflows/FAST%20testing/badge.svg)
+
 This is an example of Wallarm FAST running security tests in the Github Actions pipeline. The target application is a DVWA.
 
 ## How to reproduce example
