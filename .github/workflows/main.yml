@@ -1,0 +1,40 @@
+name: FAST testing
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+    - name: Building networking and images
+      run: docker-compose build
+
+  testing:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Containers coming up
+      run: docker-compose up -d dvwa fast selenium
+
+    - name: Recording tests
+      if: success()
+      run: docker-compose run --service-ports test
+
+    - name: Running security tests
+      if: success()
+      run: docker-compose run -e CI_MODE=testing -e TEST_RUN_URI=http://dvwa:80 fast
+
+  cleaning:
+    if: always()
+    needs: [build, testing]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Cleanup
+      run: docker-compose down
