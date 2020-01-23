@@ -13,6 +13,8 @@ jobs:
     - uses: actions/checkout@master
     - name: Building networking and images
       run: docker-compose build
+      env:
+        super_secret: ${{ secrets.WALLARM_API_TOKEN }}
 
   testing:
     needs: build
