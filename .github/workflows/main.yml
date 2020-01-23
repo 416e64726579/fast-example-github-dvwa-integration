@@ -6,6 +6,9 @@ on:
       - master
 
 jobs:
+  env:
+    WALLARM_API_TOKEN: ${{ secrets.WALLARM_API_TOKEN }}
+    
   build:
     runs-on: ubuntu-latest
 
@@ -13,8 +16,6 @@ jobs:
     - uses: actions/checkout@master
     - name: Building networking and images
       run: docker-compose build
-      env:
-        WALLARM_API_TOKEN: ${{ secrets.WALLARM_API_TOKEN }}
 
   testing:
     needs: build
@@ -24,8 +25,6 @@ jobs:
     - uses: actions/checkout@master
     - name: Containers coming up
       run: docker-compose up -d dvwa fast selenium
-      env:
-        WALLARM_API_TOKEN: ${{ secrets.WALLARM_API_TOKEN }}
 
     - name: Recording tests
       if: success()
@@ -34,8 +33,6 @@ jobs:
     - name: Running security tests
       if: success()
       run: docker-compose run -e CI_MODE=testing -e TEST_RUN_URI=http://dvwa:80 fast
-      env:
-        WALLARM_API_TOKEN: ${{ secrets.WALLARM_API_TOKEN }}
 
   cleaning:
     if: always()
